@@ -3,11 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
+  res.render('index', { title: 'Real-Time Chat' });
 });
 
 module.exports = router;

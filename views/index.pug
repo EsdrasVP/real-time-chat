@@ -1,8 +1,34 @@
 extends layout
 
-script(src='/socket.io/socket.io.js')
-  var socket = io();
-
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to the #{title}!
+  ul(id='messages')
+  form(id='form', action='')
+    input(id='input', autocomplete='off')
+    button Send
+
+  //- Include Socket.io client library
+  script(src="/socket.io/socket.io.js")
+
+  //- Initialize Socket.io connection
+  script.
+    var socket = io(); // Connects to the same origin by default
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+
+    // Listen for incoming messages
+    socket.on('chat message', (msg) => {
+      var li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li); // Append to the DOM
+      window.scrollTo(0, document.body.scrollHeight);
+    });
